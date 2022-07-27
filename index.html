@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="module">
+    if ('caches' in window) {
+        console.log('caches supported');
+
+        await run();
+    }else {
+        console.log('caches not support');
+    }
+
+    async function run() {
+        const cache = await caches.open('cache-v1')
+        let data = await load_json(cache, '/cat.json');
+        console.log(data);
+    }
+
+    async function load_json(cache, s) {
+        let data;
+        let resp = await cache.match(s);
+        switch (typeof(resp)) {
+            case "undefined":
+                console.log(s + ' is not cached');
+                const options = {
+                    method: "GET",
+                    headers: new Headers( {
+                        'Content-Type': 'text/html'
+                    }),
+                }
+                await cache.add(new Request(s, options));
+                resp = await cache.match(s);
+                data = await resp.json();
+                break;
+
+            default:
+                console.log(s + ' is cached');
+                data = await resp.json();
+                break;
+       }
+
+        return data
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "without-bundler",
+  "version": "0.1.0",
+  "files": [
+    "without_bundler_bg.wasm",
+    "without_bundler.js",
+    "without_bundler.d.ts"
+  ],
+  "module": "without_bundler.js",
+  "types": "without_bundler.d.ts",
+  "sideEffects": false
+}
